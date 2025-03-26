@@ -1,29 +1,73 @@
 import Footer from "@/app/_components/footer";
 import Header from "@/app/_components/header";
 import AdSpace from "@/app/_components/ad-space";
-import { CMS_NAME, HOME_OG_IMAGE_URL } from "@/lib/constants";
-import type { Metadata } from "next";
+import { CMS_NAME, HOME_OG_IMAGE_URL, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#111827',
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://cryptobitmag.com'),
-  title: `${CMS_NAME} - Cryptocurrency & Blockchain News`,
-  description: `${CMS_NAME} is your trusted source for cryptocurrency and blockchain news, insights, and expert interviews.`,
+  metadataBase: new URL(SITE_URL),
+  title: {
+    template: `%s | ${CMS_NAME}`,
+    default: `${CMS_NAME} - Cryptocurrency & Blockchain News`
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: CMS_NAME,
+  referrer: 'origin-when-cross-origin',
+  keywords: ['cryptocurrency', 'blockchain', 'bitcoin', 'ethereum', 'solana', 'defi', 'nft', 'crypto news'],
+  authors: [{ name: CMS_NAME, url: SITE_URL }],
+  creator: CMS_NAME,
+  publisher: CMS_NAME,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     images: [HOME_OG_IMAGE_URL],
     title: `${CMS_NAME} - Cryptocurrency & Blockchain News`,
-    description: `${CMS_NAME} is your trusted source for cryptocurrency and blockchain news, insights, and expert interviews.`,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: CMS_NAME,
+    locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: `${CMS_NAME} - Cryptocurrency & Blockchain News`,
-    description: `${CMS_NAME} is your trusted source for cryptocurrency and blockchain news, insights, and expert interviews.`,
+    description: SITE_DESCRIPTION,
     images: [HOME_OG_IMAGE_URL],
+    creator: '@cryptobitmag',
+    site: '@cryptobitmag',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: SITE_URL,
+    types: {
+      'application/rss+xml': `${SITE_URL}/feed.xml`,
+    },
   },
 };
 
@@ -81,6 +125,43 @@ export default function RootLayout({
           <AdSpace position="horizontal" className="border-t pt-8" />
         </div>
         <Footer />
+        
+        {/* Organization Schema JSON-LD */}
+        <Script id="organization-schema" type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: CMS_NAME,
+            url: SITE_URL,
+            logo: `${SITE_URL}/favicon/android-chrome-512x512.png`,
+            sameAs: [
+              'https://twitter.com/cryptobitmag',
+              'https://facebook.com/cryptobitmag',
+              'https://linkedin.com/company/cryptobitmag',
+              'https://instagram.com/cryptobitmag'
+            ],
+            contactPoint: {
+              '@type': 'ContactPoint',
+              email: 'contact@cryptobitmag.com',
+              contactType: 'customer service'
+            }
+          })}
+        </Script>
+        
+        {/* Website Schema JSON-LD */}
+        <Script id="website-schema" type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: CMS_NAME,
+            url: SITE_URL,
+            potentialAction: {
+              '@type': 'SearchAction',
+              'target': `${SITE_URL}/posts?search={search_term_string}`,
+              'query-input': 'required name=search_term_string'
+            }
+          })}
+        </Script>
       </body>
     </html>
   );
