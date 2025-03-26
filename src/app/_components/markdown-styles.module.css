@@ -1,0 +1,162 @@
+/* postcss-css-variables: true */
+/* tailwindcss */
+
+.markdown {
+  @apply text-lg leading-relaxed;
+}
+
+/* Basic elements */
+.markdown p {
+  @apply my-6;
+}
+
+.markdown strong {
+  @apply font-bold;
+}
+
+.markdown em {
+  @apply italic;
+}
+
+/* Lists */
+.markdown ul,
+.markdown ol {
+  @apply my-6 pl-6;
+}
+
+.markdown ul {
+  @apply list-disc;
+}
+
+.markdown ol {
+  @apply list-decimal;
+}
+
+.markdown li {
+  @apply mb-2;
+}
+
+.markdown li > ul,
+.markdown li > ol {
+  @apply my-2;
+}
+
+/* Headings */
+.markdown h1 {
+  @apply text-4xl font-bold mt-16 mb-6 leading-tight;
+}
+
+.markdown h2 {
+  @apply text-3xl font-bold mt-12 mb-4 leading-snug;
+}
+
+.markdown h3 {
+  @apply text-2xl font-bold mt-8 mb-4 leading-snug;
+}
+
+.markdown h4 {
+  @apply text-xl font-bold mt-6 mb-3 leading-snug;
+}
+
+.markdown h5 {
+  @apply text-lg font-bold mt-4 mb-2;
+}
+
+.markdown h6 {
+  @apply font-bold mt-4 mb-2 text-gray-700;
+}
+
+/* Links and references */
+.markdown a {
+  @apply text-red-600 font-medium transition-colors duration-200;
+}
+
+.markdown a:hover {
+  @apply text-red-700 underline;
+}
+
+.markdown blockquote {
+  @apply border-l-4 border-red-600 pl-4 italic my-6 text-gray-700;
+}
+
+/* Code blocks */
+.markdown pre {
+  @apply overflow-auto rounded-lg p-4 bg-gray-800 text-white;
+}
+
+.markdown code {
+  @apply bg-gray-100 px-1 py-0.5 rounded text-red-800 text-sm;
+}
+
+/* Media elements */
+.markdown img {
+  @apply rounded-lg my-8 w-full max-w-2xl mx-auto;
+}
+
+.markdown video {
+  @apply rounded-lg my-8 w-full max-w-2xl mx-auto;
+}
+
+.markdown iframe {
+  @apply rounded-lg my-8 w-full max-w-2xl mx-auto;
+}
+
+/* Tables */
+.markdown table {
+  @apply w-full my-8 border-collapse;
+}
+
+.markdown table th {
+  @apply bg-gray-100 px-4 py-2 text-left font-medium text-gray-700;
+}
+
+.markdown table td {
+  @apply border border-gray-200 px-4 py-2;
+}
+
+.markdown table tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+/* Horizontal rule */
+.markdown hr {
+  @apply my-8 border-t border-gray-300;
+}
+
+/* Task list */
+.markdown input[type='checkbox'] {
+  @apply mr-2 h-4 w-4 align-middle;
+}
+
+/* Special effects for press releases */
+.markdown.press-release blockquote {
+  @apply border-l-4 border-gray-400 bg-gray-50;
+}
+
+/* Special compact mode */
+.markdown.text-base h2 {
+  @apply text-2xl;
+}
+
+.markdown.text-base h3 {
+  @apply text-xl;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .markdown code {
+    @apply bg-gray-800 text-red-400;
+  }
+  
+  .markdown table th {
+    @apply bg-gray-800 text-gray-200;
+  }
+  
+  .markdown table td {
+    @apply border-gray-700;
+  }
+  
+  .markdown table tr:nth-child(even) {
+    @apply bg-gray-900;
+  }
+}

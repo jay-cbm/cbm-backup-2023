@@ -1,0 +1,15 @@
+{
+  "homepage": {
+    "mainFeature": {
+      "contentType": "post",
+      "contentPath": "content/posts/placeholder.md"
+    },
+    "secondaryFeatures": [],
+    "trendingItems": []
+  },
+  "advertisements": {
+    "sidebarAds": [],
+    "inContentAds": [],
+    "popupAds": []
+  }
+}

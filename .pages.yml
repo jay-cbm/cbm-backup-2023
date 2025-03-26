@@ -1,0 +1,699 @@
+# PagesCMS Configuration for CryptoBitMag
+# Comprehensive media and content configuration
+
+# Media Configuration
+media:
+  - name: "post-images"
+    label: "Post Images"
+    input: "public/images"
+    output: "/images"
+    extensions: ["jpg", "jpeg", "png", "webp", "gif"]
+  
+  - name: "author-images"
+    label: "Author Images"
+    input: "public/images/authors"
+    output: "/images/authors"
+    extensions: ["jpg", "jpeg", "png"]
+    
+  - name: "logos"
+    label: "Logos & Icons"
+    input: "public/images/logos"
+    output: "/images/logos"
+    extensions: ["png", "svg", "ico", "webp"]
+
+# Content Configuration
+content:
+  # Blog Posts
+  - name: "posts"
+    label: "Blog Posts"
+    path: "content/posts"
+    type: "collection"
+    format: "yaml-frontmatter"
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: ["title", "date", "author.name", "topics", "status"]
+      primary: "title"
+      sort: ["date", "title"]
+      default:
+        sort: "date"
+        order: "desc"
+    fields:
+      - name: "title"
+        label: "Title"
+        type: "string"
+        required: true
+        description: "Post title (60-80 characters for SEO)"
+      
+      - name: "excerpt"
+        label: "Excerpt"
+        type: "text"
+        required: true
+        description: "Brief summary shown in previews and meta descriptions"
+        pattern:
+          regex: ".{10,160}"
+          message: "Excerpt should be between 10 and 160 characters"
+      
+      - name: "date"
+        label: "Publication Date"
+        type: "date"
+        required: true
+        description: "When the article will be published"
+        format: "YYYY-MM-DD HH:mm"
+      
+      - name: "status"
+        label: "Status"
+        type: "select"
+        options:
+          values: ["draft", "review", "published", "updated"]
+        default: "draft"
+        description: "Current status of the article"
+        
+
+      
+      - name: "author"
+        label: "Author"
+        type: "object"
+        description: "Information about the content creator"
+        fields:
+          - name: "name"
+            label: "Name"
+            type: "string"
+            required: true
+          
+          - name: "picture"
+            label: "Profile Photo"
+            type: "image"
+            media: "author-images"
+            description: "Square image, minimum 200x200px"
+          
+          - name: "bio"
+            label: "Short Bio"
+            type: "string"
+            description: "Brief author description (max 100 characters)"
+            pattern:
+              regex: ".{0,100}"
+              message: "Bio should be less than 100 characters"
+      
+      - name: "coverImage"
+        label: "Cover Image"
+        type: "image"
+        media: "post-images"
+        required: true
+        description: "Main image for the article (16:9 ratio, minimum 1200x675px)"
+      
+      - name: "ogImage"
+        label: "Social Media Image"
+        type: "object"
+        description: "Custom image for social media shares (defaults to cover image if not set)"
+        fields:
+          - name: "url"
+            label: "Image URL"
+            type: "image"
+            media: "post-images"
+      
+      - name: "topics"
+        label: "Topics"
+        type: "select"
+        options:
+          multiple: true
+          creatable: true
+          values: [
+            # Blockchain platforms
+            { value: "bitcoin", label: "Bitcoin" },
+            { value: "ethereum", label: "Ethereum" },
+            { value: "solana", label: "Solana" },
+            { value: "cardano", label: "Cardano" },
+            { value: "polkadot", label: "Polkadot" },
+            { value: "avalanche", label: "Avalanche" },
+            { value: "cosmos", label: "Cosmos" },
+            { value: "ripple", label: "Ripple/XRP" },
+            { value: "tezos", label: "Tezos" },
+            { value: "near", label: "NEAR" },
+            
+            # DeFi and NFTs
+            { value: "defi", label: "DeFi" },
+            { value: "nfts", label: "NFTs" },
+            { value: "dao", label: "DAOs" },
+            
+            # Web3 applications
+            { value: "gaming", label: "Gaming" },
+            { value: "metaverse", label: "Metaverse" },
+            
+            # Technology
+            { value: "cryptography", label: "Cryptography" },
+            { value: "privacy", label: "Privacy" },
+            { value: "security", label: "Security" },
+            { value: "hacks", label: "Hacks & Exploits" },
+            { value: "interoperability", label: "Interoperability" },
+            { value: "scaling", label: "Scaling Solutions" },
+            { value: "layer2", label: "Layer 2" },
+            
+            # Operations
+            { value: "mining", label: "Mining" },
+            { value: "staking", label: "Staking" },
+            { value: "governance", label: "Governance" },
+            
+            # Finance & regulation
+            { value: "market", label: "Market Analysis" },
+            { value: "stablecoins", label: "Stablecoins" },
+            { value: "legal", label: "Legal" },
+            { value: "regulation", label: "Regulation" },
+            
+            # General
+            { value: "identity", label: "Identity" },
+            { value: "news", label: "News" },
+            { value: "technology", label: "Technology" },
+            { value: "economics", label: "Economics" }
+          ]
+        description: "Categories associated with this content"
+      
+      - name: "body"
+        label: "Content"
+        type: "rich-text"
+        required: true
+        description: "Main article content in Markdown format"
+
+  # AMAs (Ask Me Anything)
+  - name: "amas"
+    label: "Ask Me Anything"
+    path: "content/amas"
+    type: "collection"
+    format: "yaml-frontmatter"
+    filename: "ama-{primary}.md"
+    view:
+      fields: ["title", "date", "guest.name", "topics"]
+      primary: "title"
+      sort: ["date", "title"]
+      default:
+        sort: "date"
+        order: "desc"
+    fields:
+      - name: "title"
+        label: "Title"
+        type: "string"
+        required: true
+        description: "AMA title (usually includes guest name)"
+      
+      - name: "excerpt"
+        label: "Excerpt"
+        type: "text"
+        required: true
+        description: "Brief summary of the AMA session"
+        pattern:
+          regex: ".{10,160}"
+          message: "Excerpt should be between 10 and 160 characters"
+      
+      - name: "date"
+        label: "Publication Date"
+        type: "date"
+        required: true
+        description: "When the AMA was or will be published"
+        format: "YYYY-MM-DD HH:mm"
+        
+
+      
+      - name: "guest"
+        label: "Guest Information"
+        type: "object"
+        description: "Information about the AMA guest"
+        fields:
+          - name: "name"
+            label: "Name"
+            type: "string"
+            required: true
+          
+          - name: "picture"
+            label: "Profile Photo"
+            type: "image"
+            media: "author-images"
+            description: "Square image, minimum 200x200px"
+          
+          - name: "title"
+            label: "Job Title"
+            type: "string"
+            description: "Guest's professional title"
+          
+          - name: "company"
+            label: "Company/Project"
+            type: "string"
+            description: "Organization the guest represents"
+          
+          - name: "bio"
+            label: "Short Bio"
+            type: "text"
+            description: "Brief guest description"
+      
+      - name: "coverImage"
+        label: "Cover Image"
+        type: "image"
+        media: "post-images"
+        required: true
+        description: "Main image for the AMA (16:9 ratio, minimum 1200x675px)"
+      
+      - name: "ogImage"
+        label: "Social Media Image" 
+        type: "object"
+        description: "Custom image for social media shares"
+        fields:
+          - name: "url"
+            label: "Image URL"
+            type: "image"
+            media: "post-images"
+      
+      - name: "topics"
+        label: "Topics"
+        type: "select"
+        options:
+          multiple: true
+          creatable: true
+          values: [
+            # Blockchain platforms
+            { value: "bitcoin", label: "Bitcoin" },
+            { value: "ethereum", label: "Ethereum" },
+            { value: "solana", label: "Solana" },
+            { value: "cardano", label: "Cardano" },
+            { value: "polkadot", label: "Polkadot" },
+            { value: "avalanche", label: "Avalanche" },
+            { value: "cosmos", label: "Cosmos" },
+            { value: "ripple", label: "Ripple/XRP" },
+            { value: "tezos", label: "Tezos" },
+            { value: "near", label: "NEAR" },
+            
+            # DeFi and NFTs
+            { value: "defi", label: "DeFi" },
+            { value: "nfts", label: "NFTs" },
+            { value: "dao", label: "DAOs" },
+            
+            # Web3 applications
+            { value: "gaming", label: "Gaming" },
+            { value: "metaverse", label: "Metaverse" },
+            
+            # Technology
+            { value: "cryptography", label: "Cryptography" },
+            { value: "privacy", label: "Privacy" },
+            { value: "security", label: "Security" },
+            { value: "hacks", label: "Hacks & Exploits" },
+            { value: "interoperability", label: "Interoperability" },
+            { value: "scaling", label: "Scaling Solutions" },
+            { value: "layer2", label: "Layer 2" },
+            
+            # Operations
+            { value: "mining", label: "Mining" },
+            { value: "staking", label: "Staking" },
+            { value: "governance", label: "Governance" },
+            
+            # Finance & regulation
+            { value: "market", label: "Market Analysis" },
+            { value: "stablecoins", label: "Stablecoins" },
+            { value: "legal", label: "Legal" },
+            { value: "regulation", label: "Regulation" },
+            
+            # General
+            { value: "identity", label: "Identity" },
+            { value: "news", label: "News" },
+            { value: "technology", label: "Technology" },
+            { value: "economics", label: "Economics" }
+          ]
+        description: "Topics covered in this AMA"
+      
+      - name: "body"
+        label: "Content"
+        type: "rich-text"
+        required: true
+        description: "Full AMA content in Q&A format"
+
+  # Press Releases
+  - name: "press-releases"
+    label: "Press Releases"
+    path: "content/press-releases"
+    type: "collection"
+    format: "yaml-frontmatter"
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: ["title", "date", "source", "topics"]
+      primary: "title"
+      sort: ["date"]
+      default:
+        sort: "date"
+        order: "desc"
+    fields:
+      - name: "title"
+        label: "Title"
+        type: "string"
+        required: true
+        description: "Press release title"
+      
+      - name: "excerpt"
+        label: "Excerpt"
+        type: "text"
+        required: true
+        description: "Brief summary of the press release"
+        pattern:
+          regex: ".{10,160}"
+          message: "Excerpt should be between 10 and 160 characters"
+      
+      - name: "date"
+        label: "Publication Date"
+        type: "date"
+        required: true
+        description: "When the press release was published"
+        format: "YYYY-MM-DD HH:mm"
+        
+
+      
+      - name: "source"
+        label: "Source"
+        type: "string"
+        description: "Original source of the press release"
+      
+      - name: "sourceUrl"
+        label: "Source URL"
+        type: "string"
+        description: "Link to the original press release (if applicable)"
+        pattern:
+          regex: "^(https?://|).*$"
+          message: "Must be a valid URL starting with http:// or https://"
+      
+      - name: "coverImage"
+        label: "Cover Image"
+        type: "image"
+        media: "post-images"
+        required: true
+        description: "Main image for the press release"
+      
+      - name: "ogImage"
+        label: "Social Media Image"
+        type: "object"
+        description: "Custom image for social media shares"
+        fields:
+          - name: "url"
+            label: "Image URL"
+            type: "image"
+            media: "post-images"
+      
+      - name: "topics"
+        label: "Topics"
+        type: "select"
+        options:
+          multiple: true
+          creatable: true
+          values: [
+            # Blockchain platforms
+            { value: "bitcoin", label: "Bitcoin" },
+            { value: "ethereum", label: "Ethereum" },
+            { value: "solana", label: "Solana" },
+            { value: "cardano", label: "Cardano" },
+            { value: "polkadot", label: "Polkadot" },
+            { value: "avalanche", label: "Avalanche" },
+            { value: "cosmos", label: "Cosmos" },
+            { value: "ripple", label: "Ripple/XRP" },
+            { value: "tezos", label: "Tezos" },
+            { value: "near", label: "NEAR" },
+            
+            # DeFi and NFTs
+            { value: "defi", label: "DeFi" },
+            { value: "nfts", label: "NFTs" },
+            { value: "dao", label: "DAOs" },
+            
+            # Web3 applications
+            { value: "gaming", label: "Gaming" },
+            { value: "metaverse", label: "Metaverse" },
+            
+            # Technology
+            { value: "cryptography", label: "Cryptography" },
+            { value: "privacy", label: "Privacy" },
+            { value: "security", label: "Security" },
+            { value: "hacks", label: "Hacks & Exploits" },
+            { value: "interoperability", label: "Interoperability" },
+            { value: "scaling", label: "Scaling Solutions" },
+            { value: "layer2", label: "Layer 2" },
+            
+            # Operations
+            { value: "mining", label: "Mining" },
+            { value: "staking", label: "Staking" },
+            { value: "governance", label: "Governance" },
+            
+            # Finance & regulation
+            { value: "market", label: "Market Analysis" },
+            { value: "stablecoins", label: "Stablecoins" },
+            { value: "legal", label: "Legal" },
+            { value: "regulation", label: "Regulation" },
+            
+            # General
+            { value: "identity", label: "Identity" },
+            { value: "news", label: "News" },
+            { value: "technology", label: "Technology" },
+            { value: "economics", label: "Economics" }
+          ]
+        description: "Categories associated with this press release"
+      
+      - name: "body"
+        label: "Content"
+        type: "rich-text"
+        required: true
+        description: "Full press release content"
+
+    # Featured Content & Advertisements
+  - name: "featured-content"
+    label: "Featured Content"
+    path: "content/featured.json"
+    type: "file"
+    format: "json"
+    fields:
+      # Homepage Features
+      - name: "homepage"
+        label: "Homepage Features"
+        type: "object"
+        description: "Control which content appears in featured positions on the homepage"
+        fields:
+          - name: "mainFeature"
+            label: "Main Feature"
+            type: "object"
+            description: "Primary featured content (hero section)"
+            fields:
+              - name: "contentType"
+                label: "Content Type"
+                type: "select"
+                options:
+                  values: [
+                    { value: "post", label: "Blog Post" },
+                    { value: "ama", label: "AMA" },
+                    { value: "press-release", label: "Press Release" }
+                  ]
+                required: true
+              - name: "contentPath"
+                label: "Content File"
+                type: "string"
+                required: true
+                description: "Path to the content file (e.g., content/posts/2025-03-27-post-title.md)"
+          
+          - name: "secondaryFeatures"
+            label: "Secondary Features"
+            type: "object"
+            list: true
+            description: "Secondary featured content items"
+            max: 3
+            fields:
+              - name: "contentType"
+                label: "Content Type"
+                type: "select"
+                options:
+                  values: [
+                    { value: "post", label: "Blog Post" },
+                    { value: "ama", label: "AMA" },
+                    { value: "press-release", label: "Press Release" }
+                  ]
+                required: true
+              - name: "contentPath"
+                label: "Content File"
+                type: "string"
+                required: true
+                description: "Path to the content file"
+          
+          - name: "trendingItems"
+            label: "Trending Items"
+            type: "object"
+            list: true
+            description: "Content shown in the trending section"
+            max: 5
+            fields:
+              - name: "contentType"
+                label: "Content Type"
+                type: "select"
+                options:
+                  values: [
+                    { value: "post", label: "Blog Post" },
+                    { value: "ama", label: "AMA" },
+                    { value: "press-release", label: "Press Release" }
+                  ]
+                required: true
+              - name: "contentPath"
+                label: "Content File"
+                type: "string"
+                required: true
+                description: "Path to the content file"
+      
+      # Advertisement Placements
+      - name: "advertisements"
+        label: "Advertisement Placements"
+        type: "object"
+        description: "Control advertisements across the site"
+        fields:
+          - name: "sidebarAds"
+            label: "Sidebar Ads"
+            type: "object"
+            list: true
+            description: "Advertisements shown in the sidebar"
+            max: 3
+            fields:
+              - name: "title"
+                label: "Title"
+                type: "string"
+                description: "Ad title (for internal reference)"
+              - name: "image"
+                label: "Ad Image"
+                type: "image"
+                media: "post-images"
+                required: true
+              - name: "url"
+                label: "Target URL"
+                type: "string"
+                required: true
+                description: "Where the ad links to"
+              - name: "startDate"
+                label: "Start Date"
+                type: "date"
+                description: "When to start showing this ad"
+              - name: "endDate"
+                label: "End Date"
+                type: "date"
+                description: "When to stop showing this ad"
+          
+          - name: "inContentAds"
+            label: "In-Content Ads"
+            type: "object"
+            list: true
+            description: "Advertisements shown within content"
+            max: 3
+            fields:
+              - name: "title"
+                label: "Title"
+                type: "string"
+                description: "Ad title (for internal reference)"
+              - name: "image"
+                label: "Ad Image"
+                type: "image"
+                media: "post-images"
+                required: true
+              - name: "url"
+                label: "Target URL"
+                type: "string"
+                required: true
+                description: "Where the ad links to"
+              - name: "position"
+                label: "Position"
+                type: "select"
+                options:
+                  values: [
+                    { value: "top", label: "Top of Content" },
+                    { value: "middle", label: "Middle of Content" },
+                    { value: "bottom", label: "Bottom of Content" }
+                  ]
+                default: "middle"
+              - name: "startDate"
+                label: "Start Date"
+                type: "date"
+                description: "When to start showing this ad"
+              - name: "endDate"
+                label: "End Date"
+                type: "date"
+                description: "When to stop showing this ad"
+                
+          - name: "popupAds"
+            label: "Popup Ads"
+            type: "object"
+            list: true
+            description: "Advertisements shown as popups"
+            max: 1
+            fields:
+              - name: "title"
+                label: "Title"
+                type: "string"
+                description: "Ad title (for internal reference)"
+              - name: "image"
+                label: "Ad Image"
+                type: "image"
+                media: "post-images"
+                required: true
+              - name: "url"
+                label: "Target URL"
+                type: "string"
+                required: true
+                description: "Where the ad links to"
+              - name: "delay"
+                label: "Delay (seconds)"
+                type: "number"
+                default: 5
+                description: "How long to wait before showing the popup"
+              - name: "startDate"
+                label: "Start Date"
+                type: "date"
+                description: "When to start showing this ad"
+              - name: "endDate"
+                label: "End Date"
+                type: "date"
+                description: "When to stop showing this ad"
+
+  # Site Configuration
+  - name: "site-config"
+    label: "Site Configuration"
+    path: "content/config.json"
+    type: "file"
+    format: "json"
+    fields:
+      - name: "title"
+        label: "Site Title"
+        type: "string"
+        default: "CryptoBitMag"
+        description: "Main site title used in browser tabs and SEO"
+      
+      - name: "description"
+        label: "Site Description"
+        type: "text"
+        description: "Default meta description for the site"
+      
+      - name: "logo"
+        label: "Site Logo"
+        type: "image"
+        media: "logos"
+        description: "Primary logo (SVG preferred)"
+      
+      - name: "favicon"
+        label: "Favicon"
+        type: "image"
+        media: "logos"
+        description: "Site favicon (32x32 recommended)"
+      
+      - name: "social"
+        label: "Social Media"
+        type: "object"
+        fields:
+          - name: "twitter"
+            label: "Twitter"
+            type: "string"
+            description: "Twitter handle (without @)"
+          
+          - name: "facebook"
+            label: "Facebook"
+            type: "string"
+            description: "Facebook page URL"
+          
+          - name: "linkedin"
+            label: "LinkedIn"
+            type: "string"
+            description: "LinkedIn profile or page URL"
+          
+          - name: "telegram"
+            label: "Telegram"
+            type: "string"
+            description: "Telegram group or channel URL"
